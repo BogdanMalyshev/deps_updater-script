@@ -13,6 +13,7 @@ async function run() {
         })
 
         updateDep({ repo_slug, workspace, dependency })
+        process.exit()
     } catch (err) {
         console.error(err)
         process.exit()

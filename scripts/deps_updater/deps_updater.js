@@ -87,7 +87,6 @@ const updateDep = async ({ repo_slug, workspace, dependency }) => {
     await createPullRequest({ branchName: branch.data.name, dependency, repo_slug, workspace })
 
     console.log("Pull request was created successfully")
-    process.exit()
 }
 
 module.exports = {
