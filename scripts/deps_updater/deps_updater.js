@@ -1,13 +1,4 @@
-const { Bitbucket } = require('bitbucket')
-const { getCreds, getDependency } = require('./questions')
-
-const { password, repo_slug, username, workspace } = getCreds()
-
-const bitbucket = new Bitbucket({
-    auth: { username, password },
-})
-
-const createBranch = async (dependency) => {
+const createBranch = async ({ repo_slug, workspace, dependency }) => {
     const { dependencyName, version } = dependency
 
     return await bitbucket.refs.createBranch({
@@ -22,7 +13,7 @@ const createBranch = async (dependency) => {
     })
 }
 
-const loadPackageJson = async (commit) => {
+const loadPackageJson = async ({ commit, repo_slug, workspace }) => {
     const { data } = await bitbucket.repositories.readSrc({
         commit,
         path: "package.json",
@@ -51,7 +42,7 @@ const updatePackageJson = async ({ json, dependency }) => {
     }
 }
 
-const createCommit = async ({ json, branchName, dependency }) => {
+const createCommit = async ({ json, branchName, dependency, repo_slug, workspace }) => {
     const { dependencyName, version } = dependency
     return bitbucket.source.createFileCommit({
         repo_slug,
@@ -64,7 +55,7 @@ const createCommit = async ({ json, branchName, dependency }) => {
     })
 }
 
-const createPullRequest = async ({ branchName, dependency }) => {
+const createPullRequest = async ({ branchName, dependency, repo_slug, workspace }) => {
     const { dependencyName, version } = dependency
     await bitbucket.pullrequests.create({
         _body: {
@@ -80,31 +71,23 @@ const createPullRequest = async ({ branchName, dependency }) => {
     })
 }
 
-const updateDep = async () => {
-    try {
-        const dependency = await getDependency()
+const updateDep = async ({ repo_slug, workspace, dependency }) => {
+    console.log("Loading...")
 
-        console.log("Loading...")
+    const branch = await createBranch({ dependency, repo_slug, workspace })
+    const packageJson = await loadPackageJson({ commit: branch.data.target.hash, repo_slug, workspace })
+    const updatedPackageJson = await updatePackageJson({ json: packageJson, dependency, repo_slug, workspace })
+    await createCommit({
+        json: updatedPackageJson,
+        branchName: branch.data.name,
+        dependency,
+        repo_slug,
+        workspace
+    })
+    await createPullRequest({ branchName: branch.data.name, dependency, repo_slug, workspace })
 
-        const branch = await createBranch(dependency)
-        const packageJson = await loadPackageJson(branch.data.target.hash)
-        const updatedPackageJson = await updatePackageJson({
-            json: packageJson,
-            dependency
-        })
-        await createCommit({
-            json: updatedPackageJson,
-            branchName: branch.data.name,
-            dependency
-        })
-        await createPullRequest({ branchName: branch.data.name, dependency })
-
-        console.log("Pull request was created successfully")
-        process.exit()
-    } catch (err) {
-        console.error(err)
-        process.exit()
-    }
+    console.log("Pull request was created successfully")
+    process.exit()
 }
 
 module.exports = {

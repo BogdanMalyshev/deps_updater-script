@@ -1,1 +1,0 @@
-# develux_test_task

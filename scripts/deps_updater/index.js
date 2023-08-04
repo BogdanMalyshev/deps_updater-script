@@ -1,3 +1,21 @@
+const { Bitbucket } = require('bitbucket')
 const { updateDep } = require('./deps_updater')
+const { getCreds, getDependency } = require('./questions')
 
-updateDep()
+async function run() {
+    try {
+        const { password, username, repo_slug, workspace } = await getCreds()
+        const dependency = await getDependency()
+
+        this.bitbucket = new Bitbucket({
+            auth: { username, password },
+        })
+
+        updateDep({ repo_slug, workspace, dependency })
+    } catch (err) {
+        console.error(err)
+        process.exit()
+    }
+}
+
+run()

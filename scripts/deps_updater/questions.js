@@ -15,12 +15,18 @@ const asyncQuestion = async (question) => {
     })
 }
 
-const getCreds = () => {
+// TODO: rewrite this to readline questions
+const getCreds = async () => {
+    const username = await asyncQuestion("Enter a bitbucket username")
+    const password = await asyncQuestion("Enter a bitbucket password")
+    const workspace = await asyncQuestion("Enter a bitbucket workspace")
+    const repo_slug = await asyncQuestion("Enter a bitbucket repo_slug")
+
     return {
-        username: 'bohdan_malyshev',
-        password: 'ATBBJz4EEChjV7aEmPR9JHYNAvrr5718E2C3',
-        workspace: 'develux-test-task',
-        repo_slug: 'test_task',
+        username,
+        password,
+        workspace,
+        repo_slug
     }
 }
 
