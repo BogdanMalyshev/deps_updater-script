@@ -12,7 +12,7 @@ async function run() {
             auth: { username, password },
         })
 
-        updateDep({ repo_slug, workspace, dependency })
+        await updateDep({ repo_slug, workspace, dependency })
         process.exit()
     } catch (err) {
         console.error(err)
