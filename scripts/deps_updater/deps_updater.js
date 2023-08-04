@@ -74,6 +74,7 @@ const createPullRequest = async ({ branchName, dependency, repo_slug, workspace 
 const updateDep = async ({ repo_slug, workspace, dependency }) => {
     console.log("Loading...")
 
+    //TODO: add errors handlers on all bitbucket responses
     const branch = await createBranch({ dependency, repo_slug, workspace })
     const packageJson = await loadPackageJson({ commit: branch.data.target.hash, repo_slug, workspace })
     const updatedPackageJson = await updatePackageJson({ json: packageJson, dependency, repo_slug, workspace })
