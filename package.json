@@ -1,0 +1,14 @@
+{
+  "name": "test_task_develux",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dep:update": "node ./scripts/deps_updater/index.js"
+  },
+  "dependencies": {
+    "bitbucket": "^2.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
