@@ -26,6 +26,8 @@ const loadPackageJson = async ({ commit, repo_slug, workspace }) => {
 
 const updatePackageJson = async ({ json, dependency }) => {
     const { dependencyName, version } = dependency
+
+    //TODO: add error handler, parser can be crash
     const package = JSON.parse(json)
 
     const { packageHasDependency, depsKey } =

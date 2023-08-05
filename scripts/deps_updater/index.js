@@ -7,7 +7,7 @@ async function run() {
         const { password, username, repo_slug, workspace } = await getCreds()
         const dependency = await getDependency()
 
-        // TODO: refactor this code
+        // TODO: refactor this code!!! temporary code...
         this.bitbucket = new Bitbucket({
             auth: { username, password },
         })
