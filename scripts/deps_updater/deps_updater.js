@@ -21,6 +21,7 @@ const loadPackageJson = async ({ commit, repo_slug, workspace }) => {
         workspace
     })
 
+    // TODO: add handler, file may not exist
     return data
 }
 

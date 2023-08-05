@@ -30,6 +30,7 @@ const getCreds = async () => {
     }
 }
 
+// TODO: rewrite this to readline questions
 const getDependency = async () => {
     const dependencyName = await asyncQuestion("Enter a dependency name")
     const version = await asyncQuestion("Enter a dependency version")
